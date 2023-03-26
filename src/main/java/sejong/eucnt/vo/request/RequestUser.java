@@ -10,7 +10,6 @@ import javax.persistence.Enumerated;
 @Data
 @NoArgsConstructor
 public class RequestUser {
-    private Long id;
     private String email;
     private String userName;
     @Enumerated(EnumType.STRING)
