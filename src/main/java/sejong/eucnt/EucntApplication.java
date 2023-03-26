@@ -11,4 +11,9 @@ public class EucntApplication {
     public static void main(String[] args) {
         SpringApplication.run(EucntApplication.class, args);
     }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 }
