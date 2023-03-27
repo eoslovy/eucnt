@@ -3,12 +3,9 @@ package sejong.eucnt.service;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +14,6 @@ import sejong.eucnt.entity.UserEntity;
 import sejong.eucnt.repository.UserRepository;
 import sejong.eucnt.vo.request.RequestLogin;
 import sejong.eucnt.vo.request.RequestUser;
-import sejong.eucnt.vo.response.ResponseLogin;
 
 import java.util.ArrayList;
 
@@ -94,5 +90,21 @@ public class UserServiceImpl implements UserService{
         return new User(userEntity.getEmail(), userEntity.getPassword(),
                 true , true, true, true,
                 new ArrayList<>());
+    }
+
+    @Override
+    public UserFormDto updateUser(Long id, RequestUser requestUser) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // UserFormDto에서 새로운 유저네임을 받아와서 user 객체의 username을 업데이트합니다.
+        userEntity.setUserName(requestUser.getUserName());
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        UserFormDto userFormDto = mapper.map(requestUser, UserFormDto.class);
+
+        userRepository.save(userEntity); // 변경된 회원 정보를 저장합니다.
+        return userFormDto;
     }
 }
