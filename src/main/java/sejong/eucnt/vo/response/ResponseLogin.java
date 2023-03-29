@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseLogin {
-    private String email;
-    private String password;
+    private Long id;
+    private String userName;
+    private String token;
 }

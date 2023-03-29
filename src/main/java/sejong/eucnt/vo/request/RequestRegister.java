@@ -9,11 +9,10 @@ import javax.persistence.Enumerated;
 
 @Data
 @NoArgsConstructor
-public class RequestUser {
-    private String email;
+public class RequestRegister {
     private String userName;
+    private String password;
+    private String SecondPassword;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private String password;
-    private String secondPassword;
 }

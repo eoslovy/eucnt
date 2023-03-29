@@ -18,7 +18,6 @@ public class UserEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-    private String email;
     @Column(name = "userName")
     private String userName;
     @Enumerated(EnumType.STRING)
@@ -30,7 +29,6 @@ public class UserEntity {
         UserEntity userEntity = new UserEntity();
         String password = passwordEncoder.encode(userFormDto.getPassword());
 
-        userEntity.setEmail(userFormDto.getEmail());
         userEntity.setUserName(userFormDto.getUserName());
         userEntity.setGender(userFormDto.getGender());
         userEntity.setPassword(password);

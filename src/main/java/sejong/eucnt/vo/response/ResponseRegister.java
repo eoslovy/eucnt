@@ -9,12 +9,6 @@ import javax.persistence.Enumerated;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResponseUser {
-    private Long id;
-    private String email;
+public class ResponseRegister {
     private String userName;
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-    private String password;
-    private String secondPassword;
 }

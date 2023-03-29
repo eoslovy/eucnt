@@ -13,7 +13,7 @@ import sejong.eucnt.dto.UserFormDto;
 import sejong.eucnt.entity.UserEntity;
 import sejong.eucnt.repository.UserRepository;
 import sejong.eucnt.vo.request.RequestLogin;
-import sejong.eucnt.vo.request.RequestUser;
+import sejong.eucnt.vo.request.RequestRegister;
 
 import java.util.ArrayList;
 
@@ -32,12 +32,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserFormDto checkValidation(RequestLogin requestLogin) {
-        UserEntity byEmail = userRepository.findByEmail(requestLogin.getEmail());
+        UserEntity byUserName = userRepository.findByUserName(requestLogin.getUsername());
 
-        if(byEmail == null)
+        if(byUserName == null)
             throw new IllegalStateException("존재하지 않는 회원입니다.");
 
-        if(!passwordEncoder.matches(requestLogin.getPassword(), byEmail.getPassword()))
+        if(!passwordEncoder.matches(requestLogin.getPassword(), byUserName.getPassword()))
             throw new IllegalStateException("비밀번호가 틀렸습니다.");
 
         ModelMapper mapper = new ModelMapper();
@@ -47,23 +47,18 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserFormDto createUser(RequestUser requestUser) {
-        UserEntity byEmail = userRepository.findByEmail(requestUser.getEmail());
-
-        if(byEmail != null)
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-
-        if(!requestUser.getPassword().equals(requestUser.getSecondPassword()))
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
-
-        UserEntity byUserName = userRepository.findByUserName(requestUser.getUserName());
+    public UserFormDto createUser(RequestRegister requestRegister) {
+        UserEntity byUserName = userRepository.findByUserName(requestRegister.getUserName());
 
         if(byUserName != null)
-            throw new IllegalStateException("이미 존재하는 닉네임입니다.");
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+
+        if(!requestRegister.getPassword().equals(requestRegister.getSecondPassword()))
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserFormDto userFormDto = mapper.map(requestUser, UserFormDto.class);
+        UserFormDto userFormDto = mapper.map(requestRegister, UserFormDto.class);
 
         userRepository.save(UserEntity.createUser(userFormDto, passwordEncoder));
 
@@ -71,38 +66,39 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserFormDto getUserDetailsByEmail(String email) {
-        UserEntity userEntity = userRepository.findByEmail(email);
+    public UserFormDto getUserDetailsByUserName(String UserName) {
+        UserEntity userEntity = userRepository.findByUserName(UserName);
 
         if(userEntity == null)
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException(UserName);
 
         return new ModelMapper().map(userEntity, UserFormDto.class);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String UserName) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByUserName(UserName);
 
         if(userEntity == null)
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException(UserName);
 
-        return new User(userEntity.getEmail(), userEntity.getPassword(),
+        return new User(userEntity.getUserName(), userEntity.getPassword(),
                 true , true, true, true,
                 new ArrayList<>());
     }
 
     @Override
-    public UserFormDto updateUser(Long id, RequestUser requestUser) {
+    public UserFormDto updateUser(Long id, RequestRegister requestRegister) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // UserFormDto에서 새로운 유저네임을 받아와서 user 객체의 username을 업데이트합니다.
-        userEntity.setUserName(requestUser.getUserName());
+        userEntity.setUserName(requestRegister.getUserName());
+        //userEntity.setPassword(requestRegister.getPassword());
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserFormDto userFormDto = mapper.map(requestUser, UserFormDto.class);
+        UserFormDto userFormDto = mapper.map(requestRegister, UserFormDto.class);
 
         userRepository.save(userEntity); // 변경된 회원 정보를 저장합니다.
         return userFormDto;

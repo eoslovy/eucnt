@@ -43,7 +43,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getEmail(),
+                            creds.getUsername(),
                             creds.getPassword(),
                             new ArrayList<>()
                     )
@@ -60,15 +60,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         String userName = ((User)authResult.getPrincipal()).getUsername();
-        UserFormDto userDetails = userService.getUserDetailsByEmail(userName);
+        UserFormDto userDetails = userService.getUserDetailsByUserName(userName);
 
         String token = Jwts.builder()
-                .setSubject(userDetails.getEmail())
+                .setSubject(userDetails.getUserName())
                 .setExpiration(new Date(System.currentTimeMillis() +
                         Long.parseLong(Objects.requireNonNull(env.getProperty("token.expiration_time")))))
                 .compact();
 
         response.addHeader("token", token);
-        response.addHeader("userId", userDetails.getEmail());
+        response.addHeader("userId", userDetails.getUserName());
     }
 }

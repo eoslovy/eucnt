@@ -9,7 +9,6 @@ import javax.persistence.Enumerated;
 @Data
 public class UserFormDto {
     private Long id;
-    private String email;
     private String userName;
     @Enumerated(EnumType.STRING)
     private Gender gender;

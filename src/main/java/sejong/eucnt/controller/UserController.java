@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import sejong.eucnt.dto.UserFormDto;
 import sejong.eucnt.service.UserService;
 import sejong.eucnt.vo.request.RequestLogin;
-import sejong.eucnt.vo.request.RequestUser;
+import sejong.eucnt.vo.request.RequestRegister;
 import sejong.eucnt.vo.response.ResponseLogin;
-import sejong.eucnt.vo.response.ResponseUser;
+import sejong.eucnt.vo.response.ResponseRegister;
 
 @RestController
 public class UserController {
@@ -31,18 +31,18 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser requestUser){
-        UserFormDto userFormDto = userService.createUser(requestUser);
+    public ResponseEntity<ResponseRegister> createUser(@RequestBody RequestRegister requestRegister){
+        UserFormDto userFormDto = userService.createUser(requestRegister);
 
-        ResponseUser responseUser = new ModelMapper().map(userFormDto, ResponseUser.class);
+        ResponseRegister responseRegister = new ModelMapper().map(userFormDto, ResponseRegister.class);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseRegister);
     }
 
     @PutMapping("/update/{user_id}")
-    public ResponseEntity<ResponseUser> updateUser(@PathVariable("user_id") Long Id, @RequestBody RequestUser requestUser) {
-        UserFormDto userFormDto = userService.updateUser(Id, requestUser);
-        ResponseUser responseUser = new ModelMapper().map(userFormDto, ResponseUser.class);
-        return ResponseEntity.ok(responseUser);
+    public ResponseEntity<ResponseRegister> updateUser(@PathVariable("user_id") Long Id, @RequestBody RequestRegister requestRegister) {
+        UserFormDto userFormDto = userService.updateUser(Id, requestRegister);
+        ResponseRegister responseRegister = new ModelMapper().map(userFormDto, ResponseRegister.class);
+        return ResponseEntity.ok(responseRegister);
     }
 }
