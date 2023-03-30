@@ -1,5 +1,6 @@
 package sejong.eucnt.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
@@ -32,7 +34,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserFormDto checkValidation(RequestLogin requestLogin) {
-        UserEntity byUserName = userRepository.findByUserName(requestLogin.getUsername());
+        UserEntity byUserName = userRepository.findByUserName(requestLogin.getUserName());
 
         if(byUserName == null)
             throw new IllegalStateException("존재하지 않는 회원입니다.");
@@ -43,7 +45,9 @@ public class UserServiceImpl implements UserService{
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        return mapper.map(requestLogin, UserFormDto.class);
+        UserFormDto userFormDto = mapper.map(byUserName, UserFormDto.class);
+
+        return userFormDto;
     }
 
     @Override

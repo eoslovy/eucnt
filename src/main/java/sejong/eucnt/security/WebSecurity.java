@@ -30,19 +30,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/login/**").permitAll()
+                .antMatchers("/login/**").permitAll();
 
-                .and()
+                /*.and()
 
-                .addFilter(getAuthenticationFilter());
+                .addFilter(getAuthenticationFilter());*/
 
         http.headers().frameOptions().disable();
     }
 
-    private AuthenticationFilter getAuthenticationFilter() throws Exception {
+    /*private AuthenticationFilter getAuthenticationFilter() throws Exception {
 
         return new AuthenticationFilter(authenticationManager(), userService, env);
-    }
+    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
