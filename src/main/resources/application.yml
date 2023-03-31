@@ -20,9 +20,6 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
-token:
-  expiration_time: 86400000
-
 #jwt:
 #  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
