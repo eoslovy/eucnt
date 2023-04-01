@@ -26,5 +26,5 @@ spring:
 #  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
 jwt:
-  secret: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo1Njc4OTA=
-  expiration: 7200001 # 토큰이 만료되기까지의 시간 (밀리초 단위, 여기서는 2시간)
+  secret: secretKey-test-authorization-jwt-manage-token
+  expiration: 7200000 # 토큰이 만료되기까지의 시간 (밀리초 단위, 여기서는 2시간)
