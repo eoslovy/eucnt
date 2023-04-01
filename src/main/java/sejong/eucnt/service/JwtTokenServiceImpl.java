@@ -3,16 +3,21 @@ package sejong.eucnt.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import java.security.Key;
 import java.util.Date;
 
 @Service
 public class JwtTokenServiceImpl implements JwtTokenService {
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+//    @Value("${jwt.secret}")
+//    private String jwtSecret;
+
+    private Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
