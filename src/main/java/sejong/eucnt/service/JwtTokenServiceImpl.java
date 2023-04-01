@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
 public class JwtTokenServiceImpl implements JwtTokenService {
 
-//    @Value("${jwt.secret}")
-//    private String jwtSecret;
-
-    private Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
