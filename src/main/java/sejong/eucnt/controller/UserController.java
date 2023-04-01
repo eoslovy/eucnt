@@ -34,7 +34,7 @@ public class UserController {
 
 
         ResponseLogin responseLogin = new ModelMapper().map(userFormDto, ResponseLogin.class);
-        responseLogin.setToken(JwtToken);
+//        responseLogin.setToken(JwtToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseLogin);
     }
