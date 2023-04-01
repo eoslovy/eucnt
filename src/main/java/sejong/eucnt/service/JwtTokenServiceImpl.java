@@ -16,8 +16,10 @@ import java.util.Date;
 @Service
 public class JwtTokenServiceImpl implements JwtTokenService {
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+//    @Value("${jwt.secret}")
+//    private String jwtSecret;
+
+    private Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512); // 새로운 서명 키 생성
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
