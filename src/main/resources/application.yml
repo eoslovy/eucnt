@@ -4,10 +4,12 @@ spring:
     console:
       enabled: true
       path: /h2-console
+      settings:
+        web-allow-others: true
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/test
+    url: jdbc:h2:mem:testdb
     username: sa
     password:
 
@@ -20,12 +22,9 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
-token:
-  expiration_time: 86400000
-
 #jwt:
 #  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
 jwt:
-  secret: YOUR_SECRET_KEY
+#  secret: t6JxjQLNxDDa3yA3VlXQh50zvV8WKS5ZcUU6kKWaErmeeH6hWUyChb0yG1X6j5e6QhQY0Bk6M5UxhKow8nJVEA==
   expiration: 7200000 # 토큰이 만료되기까지의 시간 (밀리초 단위, 여기서는 2시간)
