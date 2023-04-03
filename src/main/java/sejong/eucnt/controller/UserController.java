@@ -12,8 +12,11 @@ import sejong.eucnt.service.JwtTokenService;
 import sejong.eucnt.service.UserService;
 import sejong.eucnt.vo.request.RequestLogin;
 import sejong.eucnt.vo.request.RequestRegister;
+import sejong.eucnt.vo.request.RequestUpdatePassword;
+import sejong.eucnt.vo.request.RequestUpdateUsername;
 import sejong.eucnt.vo.response.ResponseLogin;
 import sejong.eucnt.vo.response.ResponseRegister;
+import sejong.eucnt.vo.response.ResponseUpdatePassword;
 
 @RestController
 @Slf4j
@@ -48,10 +51,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseRegister);
     }
 
-    @PutMapping("/update/{user_id}")
-    public ResponseEntity<ResponseRegister> updateUser(@PathVariable("user_id") Long Id, @RequestBody RequestRegister requestRegister) {
-        UserFormDto userFormDto = userService.updateUser(Id, requestRegister);
+    @PutMapping("/update-username/{user_id}")
+    public ResponseEntity<ResponseRegister> updateUsername(@PathVariable("user_id") Long Id, @RequestBody RequestUpdateUsername requestUpdateUsername) {
+        UserFormDto userFormDto = userService.updateUsername(Id, requestUpdateUsername);
         ResponseRegister responseRegister = new ModelMapper().map(userFormDto, ResponseRegister.class);
         return ResponseEntity.ok(responseRegister);
     }
+    @PutMapping("/update-password/{user_id}")
+    public ResponseEntity<ResponseUpdatePassword> updateUserPassword(@PathVariable("user_id") Long Id, @RequestBody RequestUpdatePassword requestUpdatePassword) {
+        UserFormDto userFormDto = userService.updatePassword(Id, requestUpdatePassword);
+        ResponseUpdatePassword responseUpdatePassword  = new ModelMapper().map(userFormDto, ResponseUpdatePassword.class);
+
+        return ResponseEntity.ok(responseUpdatePassword);
+    }
+
+
 }

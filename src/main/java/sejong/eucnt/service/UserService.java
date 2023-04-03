@@ -4,6 +4,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import sejong.eucnt.dto.UserFormDto;
 import sejong.eucnt.vo.request.RequestLogin;
 import sejong.eucnt.vo.request.RequestRegister;
+import sejong.eucnt.vo.request.RequestUpdatePassword;
+import sejong.eucnt.vo.request.RequestUpdateUsername;
 
 public interface UserService extends UserDetailsService {
     UserFormDto checkValidation(RequestLogin requestLogin);
@@ -12,5 +14,7 @@ public interface UserService extends UserDetailsService {
 
     UserFormDto getUserDetailsByUserName(String userName);
 
-    UserFormDto updateUser(Long id, RequestRegister userFormDto);
+    UserFormDto updateUsername(Long id, RequestUpdateUsername userFormDto);
+
+    UserFormDto updatePassword(Long id, RequestUpdatePassword userFormDto);
 }
