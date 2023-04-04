@@ -40,10 +40,10 @@ public class UserServiceImpl implements UserService{
         UserEntity byUserName = userRepository.findByUserName(requestLogin.getUserName());
 
         if(byUserName == null)
-            throw new IllegalStateException("존재하지 않는 회원입니다.");
+            throw new IllegalStateException("존재하지 않는 회원입니다");
 
         if(!passwordEncoder.matches(requestLogin.getPassword(), byUserName.getPassword()))
-            throw new IllegalStateException("비밀번호가 틀렸습니다.");
+            throw new IllegalStateException("비밀번호가 틀렸습니다");
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -58,10 +58,10 @@ public class UserServiceImpl implements UserService{
         UserEntity byUserName = userRepository.findByUserName(requestRegister.getUserName());
 
         if(byUserName != null)
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new IllegalStateException("이미 존재하는 회원입니다");
 
         if(!requestRegister.getPassword().equals(requestRegister.getSecondPassword()))
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다");
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserFormDto updateUsername(Long id, RequestUpdateUsername requestUpdateUsername) {
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
 
         // UserFormDto에서 새로운 유저네임을 받아와서 user 객체의 username을 업데이트합니다.
         userEntity.setUserName(requestUpdateUsername.getUserName());
@@ -114,14 +114,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserFormDto updatePassword(Long id, RequestUpdatePassword requestUpdatePassword) {
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
 
         // 현재 비밀번호 검증
         if (!passwordEncoder.matches(requestUpdatePassword.getPassword(), userEntity.getPassword())) {
-            throw new RuntimeException("Current password is invalid");
+            throw new RuntimeException("현재 암호가 유효하지 않습니다");
         }
         if(!requestUpdatePassword.getNewPassword().equals(requestUpdatePassword.getSecondNewPassword()))
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다");
 
         // 새 비밀번호로 변경
         userEntity.setPassword(passwordEncoder.encode(requestUpdatePassword.getNewPassword()));
@@ -133,5 +133,14 @@ public class UserServiceImpl implements UserService{
 
         userRepository.save(userEntity); // 변경된 회원 정보를 저장합니다.
         return userFormDto;
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
+
+        userRepository.delete(userEntity);
     }
 }
