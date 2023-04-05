@@ -6,5 +6,8 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseUpdatePassword {
-    private String userName;
+    private String status;
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.dto.UserFormDto;
+import sejong.eucnt.entity.BoardEntity;
 import sejong.eucnt.service.JwtTokenService;
 import sejong.eucnt.service.UserService;
 import sejong.eucnt.vo.request.RequestLogin;
@@ -17,6 +19,9 @@ import sejong.eucnt.vo.request.RequestUpdateUsername;
 import sejong.eucnt.vo.response.ResponseLogin;
 import sejong.eucnt.vo.response.ResponseRegister;
 import sejong.eucnt.vo.response.ResponseUpdatePassword;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -61,6 +66,7 @@ public class UserController {
     public ResponseEntity<ResponseUpdatePassword> updateUserPassword(@PathVariable("user_id") Long Id, @RequestBody RequestUpdatePassword requestUpdatePassword) {
         UserFormDto userFormDto = userService.updatePassword(Id, requestUpdatePassword);
         ResponseUpdatePassword responseUpdatePassword  = new ModelMapper().map(userFormDto, ResponseUpdatePassword.class);
+        responseUpdatePassword.setStatus("success");
 
         return ResponseEntity.ok(responseUpdatePassword);
     }
@@ -70,5 +76,4 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }
-
 }
