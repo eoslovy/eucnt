@@ -26,7 +26,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
     private JwtTokenService jwtTokenService;
 
     @Autowired

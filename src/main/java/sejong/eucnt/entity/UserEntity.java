@@ -9,6 +9,8 @@ import sejong.eucnt.dto.UserFormDto;
 import sejong.eucnt.enumeration.Gender;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -24,6 +26,8 @@ public class UserEntity {
     private Gender gender;
     private String password;
     private String secondPassword;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardEntity> boards = new ArrayList<>();
 
     public static UserEntity createUser(UserFormDto userFormDto, BCryptPasswordEncoder passwordEncoder){
         UserEntity userEntity = new UserEntity();
