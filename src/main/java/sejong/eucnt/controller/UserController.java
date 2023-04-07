@@ -12,10 +12,7 @@ import sejong.eucnt.dto.UserFormDto;
 import sejong.eucnt.entity.BoardEntity;
 import sejong.eucnt.service.JwtTokenService;
 import sejong.eucnt.service.UserService;
-import sejong.eucnt.vo.request.RequestLogin;
-import sejong.eucnt.vo.request.RequestRegister;
-import sejong.eucnt.vo.request.RequestUpdatePassword;
-import sejong.eucnt.vo.request.RequestUpdateUsername;
+import sejong.eucnt.vo.request.*;
 import sejong.eucnt.vo.response.ResponseLogin;
 import sejong.eucnt.vo.response.ResponseRegister;
 import sejong.eucnt.vo.response.ResponseUpdatePassword;
@@ -72,7 +69,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{user_id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("user_id") Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable("user_id") Long id, @RequestBody RequestDeleteUser requestDeleteUser) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }

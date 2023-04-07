@@ -29,32 +29,32 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @PostMapping("/boards/{country_name}/create")
-    public ResponseEntity<ResponseCreateBoard> createBoard(@PathVariable("country_name")CountryName countryName, @RequestBody RequestCreateBoard requestCreateBoard) {
+    @PostMapping("/boards/{country_name}/create/{user_id}")
+    public ResponseEntity<ResponseCreateBoard> createBoard(@PathVariable("country_name")CountryName countryName, @PathVariable("user_id") Long id, @RequestBody RequestCreateBoard requestCreateBoard) {
         BoardFormDto boardFormDto = boardService.createBoard(requestCreateBoard);
         ResponseCreateBoard responseCreateBoard = new ModelMapper().map(boardFormDto, ResponseCreateBoard.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCreateBoard);
     }
 
-    @GetMapping("/boards/{country_name}/read/{id}")
-    public ResponseEntity<ResponseReadBoard> readBoard(@PathVariable("country_name") CountryName countryName, @PathVariable("id") Long id){
+    @GetMapping("/boards/{country_name}/read")
+    public ResponseEntity<ResponseReadBoard> readBoard(@PathVariable("country_name") CountryName countryName, Long id){
         BoardFormDto boardFormDto = boardService.readBoard(id);
         ResponseReadBoard responseReadBoard = new ModelMapper().map(boardFormDto, ResponseReadBoard.class);
         responseReadBoard.setStatus("success");
         return ResponseEntity.ok(responseReadBoard);
     }
 
-    @PutMapping("/boards/{country_name}/update/{id}")
+    @PutMapping("/boards/{country_name}/update/{board_id}")
     public ResponseEntity<ResponseUpdateBoard> updateBoard(@PathVariable("country_name") CountryName countryName,
-                                                           @PathVariable Long id, @RequestBody RequestUpdateBoard requestUpdateBoard) {
+                                                           @PathVariable ("board_id") Long id, @RequestBody RequestUpdateBoard requestUpdateBoard) {
         BoardFormDto boardFormDto = boardService.updateBoard(id, requestUpdateBoard);
         ResponseUpdateBoard responseUpdateBoard = new ModelMapper().map(boardFormDto, ResponseUpdateBoard.class);
         responseUpdateBoard.setStatus("success");
         return ResponseEntity.ok(responseUpdateBoard);
     }
 
-    @DeleteMapping("/boards/{country_name}/delete/{id}")
-    public ResponseEntity<?> deleteBoard(@PathVariable("country_name") CountryName countryName, @PathVariable Long id) {
+    @DeleteMapping("/boards/{country_name}/delete/{board_id}")
+    public ResponseEntity<?> deleteBoard(@PathVariable("country_name") CountryName countryName, @PathVariable ("board_id") Long id) {
         boardService.deleteBoard(id);
         return ResponseEntity.ok("User deleted successfully");
 //        return ResponseEntity.noContent().build();
