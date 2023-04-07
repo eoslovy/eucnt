@@ -13,9 +13,11 @@ import sejong.eucnt.enumeration.CountryName;
 import sejong.eucnt.service.BoardService;
 import sejong.eucnt.vo.request.RequestCreateBoard;
 import sejong.eucnt.vo.request.RequestReadBoard;
+import sejong.eucnt.vo.request.RequestUpdateBoard;
 import sejong.eucnt.vo.response.ResponseCreateBoard;
 import sejong.eucnt.vo.response.ResponseReadBoard;
 import sejong.eucnt.vo.response.ResponseRegister;
+import sejong.eucnt.vo.response.ResponseUpdateBoard;
 
 @RestController
 @Slf4j
@@ -42,4 +44,19 @@ public class BoardController {
         return ResponseEntity.ok(responseReadBoard);
     }
 
+    @PutMapping("/boards/{country_name}/update/{id}")
+    public ResponseEntity<ResponseUpdateBoard> updateBoard(@PathVariable("country_name") CountryName countryName,
+                                                           @PathVariable Long id, @RequestBody RequestUpdateBoard requestUpdateBoard) {
+        BoardFormDto boardFormDto = boardService.updateBoard(id, requestUpdateBoard);
+        ResponseUpdateBoard responseUpdateBoard = new ModelMapper().map(boardFormDto, ResponseUpdateBoard.class);
+        responseUpdateBoard.setStatus("success");
+        return ResponseEntity.ok(responseUpdateBoard);
+    }
+
+    @DeleteMapping("/boards/{country_name}/delete/{id}")
+    public ResponseEntity<?> deleteBoard(@PathVariable("country_name") CountryName countryName, @PathVariable Long id) {
+        boardService.deleteBoard(id);
+        return ResponseEntity.ok("User deleted successfully");
+//        return ResponseEntity.noContent().build();
+    }
 }

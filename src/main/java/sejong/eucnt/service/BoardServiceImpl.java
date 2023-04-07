@@ -13,6 +13,7 @@ import sejong.eucnt.repository.BoardRepository;
 import sejong.eucnt.repository.UserRepository;
 import sejong.eucnt.vo.request.RequestCreateBoard;
 import sejong.eucnt.vo.request.RequestReadBoard;
+import sejong.eucnt.vo.request.RequestUpdateBoard;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -60,5 +61,29 @@ public class BoardServiceImpl implements BoardService{
         BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
 
         return boardFormDto;
+    }
+
+    @Override
+    public BoardFormDto updateBoard(Long id, RequestUpdateBoard requestUpdateBoard) {
+        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Board not found"));
+
+        // updateBoard() 메서드에 필요한 필드들을 RequestUpdateBoard로부터 가져와서 BoardEntity에 반영합니다.
+        boardEntity.setTitle(requestUpdateBoard.getTitle());
+        boardEntity.setContent(requestUpdateBoard.getContent());
+        boardEntity.setUpdated_at(LocalDateTime.now());
+
+        // BoardEntity 저장
+        boardRepository.save(boardEntity);
+
+        // 수정된 BoardFormDto를 반환합니다.
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
+        return boardFormDto;
+    }
+
+    @Override
+    public void deleteBoard(Long id) {
+        boardRepository.deleteById(id);
     }
 }
