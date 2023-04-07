@@ -12,6 +12,7 @@ import sejong.eucnt.entity.UserEntity;
 import sejong.eucnt.repository.BoardRepository;
 import sejong.eucnt.repository.UserRepository;
 import sejong.eucnt.vo.request.RequestCreateBoard;
+import sejong.eucnt.vo.request.RequestReadBoard;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -46,6 +47,17 @@ public class BoardServiceImpl implements BoardService{
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BoardFormDto boardFormDto = mapper.map(requestCreateBoard, BoardFormDto.class);
+
+        return boardFormDto;
+    }
+
+    @Override
+    public BoardFormDto readBoard(Long id) {
+        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Board not found"));
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
 
         return boardFormDto;
     }
