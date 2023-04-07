@@ -17,6 +17,7 @@ import sejong.eucnt.vo.request.RequestUpdateBoard;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import javax.persistence.EntityExistsException;
 
 @Service
 @Transactional
@@ -33,7 +34,11 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardFormDto createBoard(RequestCreateBoard requestCreateBoard) {
-        UserEntity userEntity = userRepository.findById(requestCreateBoard.getUser().getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Long boardId = requestCreateBoard.getId();
+        if (boardId != null && boardRepository.existsById(boardId)) {
+            throw new EntityExistsException("게시물 아이디 " + boardId + "에 해당하는 게시물이 이미 존재합니다");
+        }
+        UserEntity userEntity = userRepository.findById(requestCreateBoard.getUser().getId()).orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다"));
         // BoardEntity 생성
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setTitle(requestCreateBoard.getTitle());
@@ -54,7 +59,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardFormDto readBoard(Long id) {
-        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Board not found"));
+        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -65,7 +70,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardFormDto updateBoard(Long id, RequestUpdateBoard requestUpdateBoard) {
-        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Board not found"));
+        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
 
         // updateBoard() 메서드에 필요한 필드들을 RequestUpdateBoard로부터 가져와서 BoardEntity에 반영합니다.
         boardEntity.setTitle(requestUpdateBoard.getTitle());
@@ -84,6 +89,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void deleteBoard(Long id) {
+        if(!boardRepository.existsById(id)) {
+            throw new EntityNotFoundException("게시물을 찾을 수 없습니다");
+        }
         boardRepository.deleteById(id);
     }
 }
