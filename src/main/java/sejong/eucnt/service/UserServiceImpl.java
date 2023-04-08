@@ -20,6 +20,7 @@ import sejong.eucnt.vo.request.RequestUpdateUsername;
 import sejong.eucnt.vo.response.ResponseUpdatePassword;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -142,5 +143,16 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
 
         userRepository.delete(userEntity);
+    }
+
+    @Override
+    public UserFormDto getUser(Long id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        return mapper.map(userEntity, UserFormDto.class);
     }
 }

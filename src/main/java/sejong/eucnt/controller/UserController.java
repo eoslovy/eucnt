@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.dto.UserFormDto;
@@ -16,6 +17,7 @@ import sejong.eucnt.vo.request.*;
 import sejong.eucnt.vo.response.ResponseLogin;
 import sejong.eucnt.vo.response.ResponseRegister;
 import sejong.eucnt.vo.response.ResponseUpdatePassword;
+import sejong.eucnt.vo.response.ResponseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,4 +75,13 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }
+
+    @GetMapping("/get-user/{user_id}")
+    public ResponseEntity<ResponseUser> getUser(@PathVariable("user_id") Long id){
+        UserFormDto userFormDto = userService.getUser(id);
+        ResponseUser responseUser = new ModelMapper().map(userFormDto, ResponseUser.class);
+
+        return ResponseEntity.ok(responseUser);
+    }
+
 }

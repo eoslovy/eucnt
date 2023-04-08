@@ -21,4 +21,6 @@ public interface UserService extends UserDetailsService {
     UserFormDto updatePassword(Long id, RequestUpdatePassword userFormDto);
 
     void deleteUser(Long id);
+
+    UserFormDto getUser(Long id);
 }
