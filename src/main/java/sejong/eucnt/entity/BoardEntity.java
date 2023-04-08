@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.enumeration.CountryName;
+import sejong.eucnt.global.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class BoardEntity {
+public class BoardEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -28,9 +29,6 @@ public class BoardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<CommentEntity> comments = new ArrayList<>();
-
     public static BoardEntity boardEntity(BoardFormDto boardFormDto) {
         BoardEntity boardEntity = new BoardEntity();
 

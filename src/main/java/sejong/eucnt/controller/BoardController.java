@@ -30,7 +30,9 @@ public class BoardController {
     }
 
     @PostMapping("/boards/{country_name}/create/{user_id}")
-    public ResponseEntity<ResponseCreateBoard> createBoard(@PathVariable("country_name")CountryName countryName, @PathVariable("user_id") Long id, @RequestBody RequestCreateBoard requestCreateBoard) {
+    public ResponseEntity<ResponseCreateBoard> createBoard(@PathVariable("country_name")CountryName countryName,
+                                                           @PathVariable("user_id") Long id,
+                                                           @RequestBody RequestCreateBoard requestCreateBoard) {
         BoardFormDto boardFormDto = boardService.createBoard(requestCreateBoard);
         ResponseCreateBoard responseCreateBoard = new ModelMapper().map(boardFormDto, ResponseCreateBoard.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCreateBoard);
