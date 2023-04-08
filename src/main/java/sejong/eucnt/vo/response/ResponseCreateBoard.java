@@ -19,6 +19,4 @@ public class ResponseCreateBoard {
     @JoinColumn(name = "user_id")
     private UserEntity user;
     private String content;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
 }

@@ -10,5 +10,4 @@ import java.time.LocalDateTime;
 public class RequestUpdateBoard {
     private String title;
     private String content;
-    private LocalDateTime updated_at;
 }

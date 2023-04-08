@@ -45,8 +45,6 @@ public class BoardServiceImpl implements BoardService{
         boardEntity.setCountryName(requestCreateBoard.getCountryName());
         boardEntity.setContent(requestCreateBoard.getContent());
         boardEntity.setUser(userEntity);
-        boardEntity.setCreated_at(LocalDateTime.now());
-        boardEntity.setUpdated_at(LocalDateTime.now());
 
         // BoardEntity 저장
         boardRepository.save(boardEntity);
@@ -75,7 +73,6 @@ public class BoardServiceImpl implements BoardService{
         // updateBoard() 메서드에 필요한 필드들을 RequestUpdateBoard로부터 가져와서 BoardEntity에 반영합니다.
         boardEntity.setTitle(requestUpdateBoard.getTitle());
         boardEntity.setContent(requestUpdateBoard.getContent());
-        boardEntity.setUpdated_at(LocalDateTime.now());
 
         // BoardEntity 저장
         boardRepository.save(boardEntity);

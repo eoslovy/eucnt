@@ -30,8 +30,6 @@ public class BoardEntity {
     private UserEntity user;
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentEntity> comments = new ArrayList<>();
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
 
     public static BoardEntity boardEntity(BoardFormDto boardFormDto) {
         BoardEntity boardEntity = new BoardEntity();
@@ -39,8 +37,6 @@ public class BoardEntity {
         boardEntity.setTitle(boardFormDto.getTitle());
         boardEntity.setCountryName(boardFormDto.getCountryName());
         boardEntity.setContent(boardFormDto.getContent());
-        boardEntity.setCreated_at(boardFormDto.getCreated_at());
-        boardEntity.setUpdated_at(boardFormDto.getUpdated_at());
 
         return boardEntity;
     }
