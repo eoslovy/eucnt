@@ -16,7 +16,6 @@ import sejong.eucnt.vo.request.*;
 import sejong.eucnt.vo.response.ResponseLogin;
 import sejong.eucnt.vo.response.ResponseRegister;
 import sejong.eucnt.vo.response.ResponseUpdatePassword;
-import sejong.eucnt.vo.response.ResponseUpdateUsername;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,10 +54,10 @@ public class UserController {
     }
 
     @PutMapping("/update-username/{user_id}")
-    public ResponseEntity<ResponseUpdateUsername> updateUsername(@PathVariable("user_id") Long Id, @RequestBody RequestUpdateUsername requestUpdateUsername) {
+    public ResponseEntity<ResponseRegister> updateUsername(@PathVariable("user_id") Long Id, @RequestBody RequestUpdateUsername requestUpdateUsername) {
         UserFormDto userFormDto = userService.updateUsername(Id, requestUpdateUsername);
-        ResponseUpdateUsername responseUpdateUsername = new ModelMapper().map(userFormDto, ResponseUpdateUsername.class);
-        return ResponseEntity.ok(responseUpdateUsername);
+        ResponseRegister responseRegister = new ModelMapper().map(userFormDto, ResponseRegister.class);
+        return ResponseEntity.ok(responseRegister);
     }
     @PutMapping("/update-password/{user_id}")
     public ResponseEntity<ResponseUpdatePassword> updateUserPassword(@PathVariable("user_id") Long Id, @RequestBody RequestUpdatePassword requestUpdatePassword) {
