@@ -99,9 +99,13 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
 
+        UserEntity byUserName = userRepository.findByUserName(requestUpdateUsername.getUserName());
+        // 새로운 유저네임이 이미 존재하는지 검증합니다.
+        if(byUserName != null)
+            throw new IllegalStateException("이미 존재하는 회원입니다");
+
         // UserFormDto에서 새로운 유저네임을 받아와서 user 객체의 username을 업데이트합니다.
         userEntity.setUserName(requestUpdateUsername.getUserName());
-        //userEntity.setPassword(requestRegister.getPassword());
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
