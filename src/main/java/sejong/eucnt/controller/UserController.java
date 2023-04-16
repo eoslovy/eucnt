@@ -16,6 +16,7 @@ import sejong.eucnt.vo.request.*;
 import sejong.eucnt.vo.response.ResponseLogin;
 import sejong.eucnt.vo.response.ResponseRegister;
 import sejong.eucnt.vo.response.ResponseUpdatePassword;
+import sejong.eucnt.vo.response.ResponseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,5 +73,13 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable("user_id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
+    }
+
+    @GetMapping("/get-user/{user_id}")
+    public ResponseEntity<ResponseUser> getUser(@PathVariable("user_id") Long id){
+        UserFormDto userFormDto = userService.getUser(id);
+        ResponseUser responseUser = new ModelMapper().map(userFormDto, ResponseUser.class);
+
+        return ResponseEntity.ok(responseUser);
     }
 }
