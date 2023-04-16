@@ -38,13 +38,13 @@ public class BoardServiceImpl implements BoardService{
         if (boardId != null && boardRepository.existsById(boardId)) {
             throw new EntityExistsException("게시물 아이디 " + boardId + "에 해당하는 게시물이 이미 존재합니다");
         }
-        UserEntity userEntity = userRepository.findById(requestCreateBoard.getUser().getId()).orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다"));
+//        UserEntity userEntity = userRepository.findById(requestCreateBoard.getUser().getId()).orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다"));
         // BoardEntity 생성
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setTitle(requestCreateBoard.getTitle());
         boardEntity.setCountryName(requestCreateBoard.getCountryName());
         boardEntity.setContent(requestCreateBoard.getContent());
-        boardEntity.setUser(userEntity);
+//        boardEntity.setUser(userEntity);
 
         // BoardEntity 저장
         boardRepository.save(boardEntity);
