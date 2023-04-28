@@ -17,6 +17,8 @@ import sejong.eucnt.vo.request.RequestUpdateBoard;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityExistsException;
 
 @Service
@@ -55,13 +57,28 @@ public class BoardServiceImpl implements BoardService{
         return boardFormDto;
     }
 
+//    @Override
+//    public BoardFormDto readBoard(Long id) {
+//        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
+//
+//        ModelMapper mapper = new ModelMapper();
+//        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//        BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
+//
+//        return boardFormDto;
+//    }
+
     @Override
-    public BoardFormDto readBoard(Long id) {
-        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
+    public List<BoardFormDto> getBoardList() {
+        List<BoardEntity> boardEntities = boardRepository.findAll();
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
+
+        List<BoardFormDto> boardFormDto = new ArrayList<>();
+        for (BoardEntity boardEntity : boardEntities) {
+            boardFormDto.add(mapper.map(boardEntity, BoardFormDto.class));
+        }
 
         return boardFormDto;
     }

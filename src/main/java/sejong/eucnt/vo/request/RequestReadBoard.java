@@ -6,5 +6,5 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class RequestReadBoard {
-    private Long id;
+    private String countryName;
 }
