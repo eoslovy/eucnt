@@ -34,13 +34,6 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCreateBoard);
     }
 
-//    @GetMapping("/boards/{country_name}/read")
-//    public ResponseEntity<ResponseReadBoard> readBoard(@PathVariable("country_name") CountryName countryName){
-//        BoardFormDto boardFormDto = boardService.readBoard(id);
-//        ResponseReadBoard responseReadBoard = new ModelMapper().map(boardFormDto, ResponseReadBoard.class);
-//        return ResponseEntity.ok(responseReadBoard);
-//    }
-
     @GetMapping("/boards/{country_name}/read/{board_id}")
     public ResponseEntity<ResponseReadPost> readBoard(@PathVariable("country_name") CountryName countryName, @PathVariable("board_id") Long id){
         BoardFormDto boardFormDto = boardService.readBoard(id);

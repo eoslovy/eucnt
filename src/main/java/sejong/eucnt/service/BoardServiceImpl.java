@@ -36,11 +36,21 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardFormDto createBoard(RequestCreateBoard requestCreateBoard, CountryName countryName) {
+        if (countryName == null || (!countryName.equals(CountryName.Spain) && !countryName.equals(CountryName.Germany) && !countryName.equals(CountryName.England))) {
+            throw new IllegalArgumentException("잘못된 국가명입니다.");
+        }
+
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BoardFormDto boardFormDto = mapper.map(requestCreateBoard, BoardFormDto.class);
         boardFormDto.setCountryName(countryName);
         Long user_id = requestCreateBoard.getUser_id();
+
+        if (user_id == null) {
+            throw new IllegalArgumentException("사용자 ID가 null입니다.");
+        }
+        UserEntity userEntity = userRepository.findById(user_id)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
         BoardEntity boardEntity = BoardEntity.boardEntity(boardFormDto, userRepository.findById(user_id).get());
         boardRepository.save(boardEntity);
@@ -61,6 +71,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardFormDto> getBoardList(CountryName countryName) {
+        if (countryName == null || (!countryName.equals(CountryName.Spain) && !countryName.equals(CountryName.Germany) && !countryName.equals(CountryName.England))) {
+            throw new IllegalArgumentException("잘못된 국가명입니다.");
+        }
         List<BoardEntity> all = boardRepository.findAll();
 
         List<BoardEntity> boardEntities = new ArrayList<>();
@@ -68,6 +81,9 @@ public class BoardServiceImpl implements BoardService{
         for(BoardEntity x : all){
             if(x.getCountryName() == countryName)
                 boardEntities.add(x);
+        }
+        if (boardEntities.isEmpty()) {
+            throw new EntityNotFoundException("해당 국가에 대한 게시물을 찾을 수 없습니다.");
         }
 
         List<BoardFormDto> boardFormDto = new ArrayList<>();
