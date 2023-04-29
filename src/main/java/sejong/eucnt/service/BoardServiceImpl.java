@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.entity.BoardEntity;
+import sejong.eucnt.enumeration.CountryName;
 import sejong.eucnt.repository.BoardRepository;
 import sejong.eucnt.repository.UserRepository;
 import sejong.eucnt.vo.request.RequestCreateBoard;
@@ -32,7 +33,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public BoardFormDto createBoard(RequestCreateBoard requestCreateBoard) {
+    public BoardFormDto createBoard(RequestCreateBoard requestCreateBoard, CountryName countryName) {
         Long boardId = requestCreateBoard.getId();
         if (boardId != null && boardRepository.existsById(boardId)) {
             throw new EntityExistsException("게시물 아이디 " + boardId + "에 해당하는 게시물이 이미 존재합니다");
@@ -41,9 +42,9 @@ public class BoardServiceImpl implements BoardService{
         // BoardEntity 생성
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setTitle(requestCreateBoard.getTitle());
-        boardEntity.setCountryName(requestCreateBoard.getCountryName());
+        boardEntity.setCountryName(countryName);
         boardEntity.setContent(requestCreateBoard.getContent());
-//        boardEntity.setUser(userEntity);
+        boardEntity.setId(requestCreateBoard.getId());
 
         // BoardEntity 저장
         boardRepository.save(boardEntity);

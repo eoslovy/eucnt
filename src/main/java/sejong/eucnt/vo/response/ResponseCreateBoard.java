@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ResponseCreateBoard {
     private Long id;
     private String title;
-    @Enumerated(EnumType.STRING)
-    private CountryName countryName;
+//    @Enumerated(EnumType.STRING)
+//    private CountryName countryName;
     private String content;
 }

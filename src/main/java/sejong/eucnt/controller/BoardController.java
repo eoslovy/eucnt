@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sejong.eucnt.dto.BoardFormDto;
+import sejong.eucnt.entity.BoardEntity;
 import sejong.eucnt.enumeration.CountryName;
 import sejong.eucnt.service.BoardService;
 import sejong.eucnt.vo.request.RequestCreateBoard;
@@ -28,7 +29,7 @@ public class BoardController {
     @PostMapping("/boards/{country_name}/create")
     public ResponseEntity<ResponseCreateBoard> createBoard(@PathVariable("country_name")CountryName countryName,
                                                            @RequestBody RequestCreateBoard requestCreateBoard) {
-        BoardFormDto boardFormDto = boardService.createBoard(requestCreateBoard);
+        BoardFormDto boardFormDto = boardService.createBoard(requestCreateBoard, countryName);
         ResponseCreateBoard responseCreateBoard = new ModelMapper().map(boardFormDto, ResponseCreateBoard.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCreateBoard);
     }
@@ -48,11 +49,11 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{country_name}/read")
-    public ResponseEntity<ResponseReadBoard> getBoardList(@PathVariable("country_name") CountryName countryName) {
-        List<BoardFormDto> boardFormDto = boardService.getBoardList();
+    public ResponseEntity<List<BoardFormDto>> getBoardList(@PathVariable("country_name") CountryName countryName) {
+        List<BoardFormDto> boardEntities = boardService.getBoardList();
         ResponseReadBoard responseBoardList = new ResponseReadBoard();
-        responseBoardList.setBoardList(boardFormDto);
-        return ResponseEntity.ok(responseBoardList);
+        responseBoardList.setBoardList(boardEntities);
+        return ResponseEntity.ok(boardEntities);
     }
 
     @PutMapping("/boards/{country_name}/update/{board_id}")
