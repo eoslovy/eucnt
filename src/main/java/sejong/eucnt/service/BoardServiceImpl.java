@@ -36,10 +36,6 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardFormDto createBoard(RequestCreateBoard requestCreateBoard, CountryName countryName) {
-        if (countryName == null || (!countryName.equals(CountryName.Spain) && !countryName.equals(CountryName.Germany) && !countryName.equals(CountryName.England))) {
-            throw new IllegalArgumentException("잘못된 국가명입니다.");
-        }
-
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BoardFormDto boardFormDto = mapper.map(requestCreateBoard, BoardFormDto.class);
@@ -71,9 +67,6 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardFormDto> getBoardList(CountryName countryName) {
-        if (countryName == null || (!countryName.equals(CountryName.Spain) && !countryName.equals(CountryName.Germany) && !countryName.equals(CountryName.England))) {
-            throw new IllegalArgumentException("잘못된 국가명입니다.");
-        }
         List<BoardEntity> all = boardRepository.findAll();
 
         List<BoardEntity> boardEntities = new ArrayList<>();
