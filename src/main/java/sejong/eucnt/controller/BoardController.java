@@ -7,20 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sejong.eucnt.dto.BoardFormDto;
-import sejong.eucnt.dto.UserFormDto;
-import sejong.eucnt.entity.BoardEntity;
 import sejong.eucnt.enumeration.CountryName;
 import sejong.eucnt.service.BoardService;
 import sejong.eucnt.vo.request.RequestCreateBoard;
-import sejong.eucnt.vo.request.RequestReadBoard;
 import sejong.eucnt.vo.request.RequestUpdateBoard;
-import sejong.eucnt.vo.response.ResponseCreateBoard;
-import sejong.eucnt.vo.response.ResponseReadBoard;
-import sejong.eucnt.vo.response.ResponseRegister;
-import sejong.eucnt.vo.response.ResponseUpdateBoard;
+import sejong.eucnt.vo.response.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -32,9 +25,8 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @PostMapping("/boards/{country_name}/create/{user_id}")
+    @PostMapping("/boards/{country_name}/create")
     public ResponseEntity<ResponseCreateBoard> createBoard(@PathVariable("country_name")CountryName countryName,
-                                                           @PathVariable("user_id") Long id,
                                                            @RequestBody RequestCreateBoard requestCreateBoard) {
         BoardFormDto boardFormDto = boardService.createBoard(requestCreateBoard);
         ResponseCreateBoard responseCreateBoard = new ModelMapper().map(boardFormDto, ResponseCreateBoard.class);
@@ -42,28 +34,24 @@ public class BoardController {
     }
 
 //    @GetMapping("/boards/{country_name}/read")
-//    public ResponseEntity<ResponseReadBoard> readBoard(@PathVariable("country_name") CountryName countryName, Long id){
+//    public ResponseEntity<ResponseReadBoard> readBoard(@PathVariable("country_name") CountryName countryName){
 //        BoardFormDto boardFormDto = boardService.readBoard(id);
 //        ResponseReadBoard responseReadBoard = new ModelMapper().map(boardFormDto, ResponseReadBoard.class);
-//        responseReadBoard.setStatus("success");
 //        return ResponseEntity.ok(responseReadBoard);
 //    }
 
-//    @GetMapping("/boards/{country_name}/list")
-//    public ResponseEntity<List<ResponseReadBoard>> readBoardList(@PathVariable("country_name") CountryName countryName) {
-//        List<BoardFormDto> boardList = boardService.getBoardList();
-//        List<ResponseReadBoard> responseBoardList = boardList.stream()
-//                .map(board -> new ModelMapper().map(board, ResponseReadBoard.class))
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok(responseBoardList);
-//    }
+    @GetMapping("/boards/{country_name}/read/{board_id}")
+    public ResponseEntity<ResponseReadPost> readBoard(@PathVariable("country_name") CountryName countryName, @PathVariable("board_id") Long id){
+        BoardFormDto boardFormDto = boardService.readBoard(id);
+        ResponseReadPost responseReadPost = new ModelMapper().map(boardFormDto, ResponseReadPost.class);
+        return ResponseEntity.ok(responseReadPost);
+    }
 
-    @GetMapping("/boards/{country_name}/list")
+    @GetMapping("/boards/{country_name}/read")
     public ResponseEntity<ResponseReadBoard> getBoardList(@PathVariable("country_name") CountryName countryName) {
-        List<BoardFormDto> boardFormDtos = boardService.getBoardList();
+        List<BoardFormDto> boardFormDto = boardService.getBoardList();
         ResponseReadBoard responseBoardList = new ResponseReadBoard();
-        responseBoardList.setBoardList(boardFormDtos);
-        responseBoardList.setStatus("success");
+        responseBoardList.setBoardList(boardFormDto);
         return ResponseEntity.ok(responseBoardList);
     }
 
@@ -72,7 +60,6 @@ public class BoardController {
                                                            @PathVariable ("board_id") Long id, @RequestBody RequestUpdateBoard requestUpdateBoard) {
         BoardFormDto boardFormDto = boardService.updateBoard(id, requestUpdateBoard);
         ResponseUpdateBoard responseUpdateBoard = new ModelMapper().map(boardFormDto, ResponseUpdateBoard.class);
-        responseUpdateBoard.setStatus("success");
         return ResponseEntity.ok(responseUpdateBoard);
     }
 
@@ -80,6 +67,5 @@ public class BoardController {
     public ResponseEntity<?> deleteBoard(@PathVariable("country_name") CountryName countryName, @PathVariable ("board_id") Long id) {
         boardService.deleteBoard(id);
         return ResponseEntity.ok("deleted successfully");
-//        return ResponseEntity.noContent().build();
     }
 }

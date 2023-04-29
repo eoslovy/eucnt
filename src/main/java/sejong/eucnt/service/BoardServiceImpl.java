@@ -8,15 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.entity.BoardEntity;
-import sejong.eucnt.entity.UserEntity;
 import sejong.eucnt.repository.BoardRepository;
 import sejong.eucnt.repository.UserRepository;
 import sejong.eucnt.vo.request.RequestCreateBoard;
-import sejong.eucnt.vo.request.RequestReadBoard;
 import sejong.eucnt.vo.request.RequestUpdateBoard;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityExistsException;
@@ -57,16 +54,16 @@ public class BoardServiceImpl implements BoardService{
         return boardFormDto;
     }
 
-//    @Override
-//    public BoardFormDto readBoard(Long id) {
-//        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
-//
-//        ModelMapper mapper = new ModelMapper();
-//        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//        BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
-//
-//        return boardFormDto;
-//    }
+    @Override
+    public BoardFormDto readBoard(Long id) {
+        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
+
+        return boardFormDto;
+    }
 
     @Override
     public List<BoardFormDto> getBoardList() {

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class RequestUpdateBoard {
+    private Long id;
     private String title;
     private String content;
 }

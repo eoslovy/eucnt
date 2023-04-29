@@ -15,8 +15,5 @@ public class ResponseCreateBoard {
     private String title;
     @Enumerated(EnumType.STRING)
     private CountryName countryName;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private UserEntity user;
     private String content;
 }
