@@ -10,13 +10,4 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseReadBoard {
     private List<BoardFormDto> boardList;
-//    private int page;
-//    private int totalPages;
-    public List<BoardFormDto> getBoardList() {
-        return boardList;
-    }
-
-    public void setBoardList(List<BoardFormDto> boardList) {
-        this.boardList = boardList;
-    }
 }

@@ -29,12 +29,13 @@ public class BoardEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
-    public static BoardEntity boardEntity(BoardFormDto boardFormDto) {
+    public static BoardEntity boardEntity(BoardFormDto boardFormDto, UserEntity user) {
         BoardEntity boardEntity = new BoardEntity();
 
         boardEntity.setTitle(boardFormDto.getTitle());
         boardEntity.setCountryName(boardFormDto.getCountryName());
         boardEntity.setContent(boardFormDto.getContent());
+        boardEntity.setUser(user);
 
         return boardEntity;
     }

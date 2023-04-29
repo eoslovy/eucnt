@@ -49,11 +49,8 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{country_name}/read")
-    public ResponseEntity<List<BoardFormDto>> getBoardList(@PathVariable("country_name") CountryName countryName) {
-        List<BoardFormDto> boardEntities = boardService.getBoardList();
-        ResponseReadBoard responseBoardList = new ResponseReadBoard();
-        responseBoardList.setBoardList(boardEntities);
-        return ResponseEntity.ok(boardEntities);
+    public List<BoardFormDto> getBoardList(@PathVariable("country_name") CountryName countryName) {
+        return boardService.getBoardList(countryName);
     }
 
     @PutMapping("/boards/{country_name}/update/{board_id}")

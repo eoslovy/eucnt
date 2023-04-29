@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class RequestCreateBoard {
-    private Long id;
+    private Long user_id;
     private String title;
 //    @Enumerated(EnumType.STRING)
 //    private CountryName countryName;

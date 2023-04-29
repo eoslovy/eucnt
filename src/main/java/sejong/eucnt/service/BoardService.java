@@ -13,7 +13,7 @@ import java.util.List;
 public interface BoardService {
     BoardFormDto createBoard(RequestCreateBoard requestCreateBoard, CountryName countryName);
     BoardFormDto readBoard(Long id);
-    List<BoardFormDto> getBoardList();
+    List<BoardFormDto> getBoardList(CountryName countryName);
     BoardFormDto updateBoard(Long id, RequestUpdateBoard requestUpdateBoard);
     void deleteBoard(Long id);
 }

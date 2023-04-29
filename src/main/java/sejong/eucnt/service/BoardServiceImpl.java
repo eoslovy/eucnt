@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.entity.BoardEntity;
+import sejong.eucnt.entity.UserEntity;
 import sejong.eucnt.enumeration.CountryName;
 import sejong.eucnt.repository.BoardRepository;
 import sejong.eucnt.repository.UserRepository;
@@ -17,6 +18,7 @@ import sejong.eucnt.vo.request.RequestUpdateBoard;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityExistsException;
 
 @Service
@@ -34,25 +36,16 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardFormDto createBoard(RequestCreateBoard requestCreateBoard, CountryName countryName) {
-        Long boardId = requestCreateBoard.getId();
-        if (boardId != null && boardRepository.existsById(boardId)) {
-            throw new EntityExistsException("게시물 아이디 " + boardId + "에 해당하는 게시물이 이미 존재합니다");
-        }
-//        UserEntity userEntity = userRepository.findById(requestCreateBoard.getUser().getId()).orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다"));
-        // BoardEntity 생성
-        BoardEntity boardEntity = new BoardEntity();
-        boardEntity.setTitle(requestCreateBoard.getTitle());
-        boardEntity.setCountryName(countryName);
-        boardEntity.setContent(requestCreateBoard.getContent());
-        boardEntity.setId(requestCreateBoard.getId());
-
-        // BoardEntity 저장
-        boardRepository.save(boardEntity);
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BoardFormDto boardFormDto = mapper.map(requestCreateBoard, BoardFormDto.class);
+        boardFormDto.setCountryName(countryName);
+        Long user_id = requestCreateBoard.getUser_id();
 
-        return boardFormDto;
+        BoardEntity boardEntity = BoardEntity.boardEntity(boardFormDto, userRepository.findById(user_id).get());
+        boardRepository.save(boardEntity);
+
+        return mapper.map(boardEntity, BoardFormDto.class);
     }
 
     @Override
@@ -67,15 +60,22 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardFormDto> getBoardList() {
-        List<BoardEntity> boardEntities = boardRepository.findAll();
+    public List<BoardFormDto> getBoardList(CountryName countryName) {
+        List<BoardEntity> all = boardRepository.findAll();
 
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        List<BoardEntity> boardEntities = new ArrayList<>();
+
+        for(BoardEntity x : all){
+            if(x.getCountryName() == countryName)
+                boardEntities.add(x);
+        }
 
         List<BoardFormDto> boardFormDto = new ArrayList<>();
-        for (BoardEntity boardEntity : boardEntities) {
-            boardFormDto.add(mapper.map(boardEntity, BoardFormDto.class));
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        for(BoardEntity b : boardEntities){
+            BoardFormDto dto = mapper.map(b, BoardFormDto.class);
+            boardFormDto.add(dto);
         }
 
         return boardFormDto;
