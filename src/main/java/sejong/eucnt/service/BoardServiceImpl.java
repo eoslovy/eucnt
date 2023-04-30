@@ -40,27 +40,26 @@ public class BoardServiceImpl implements BoardService{
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BoardFormDto boardFormDto = mapper.map(requestCreateBoard, BoardFormDto.class);
         boardFormDto.setCountryName(countryName);
-        Long user_id = requestCreateBoard.getUser_id();
 
-        if (user_id == null) {
-            throw new IllegalArgumentException("사용자 ID가 null입니다.");
-        }
-        UserEntity userEntity = userRepository.findById(user_id)
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+        Optional<UserEntity> user = userRepository.findById(requestCreateBoard.getUser_id());
 
-        BoardEntity boardEntity = BoardEntity.boardEntity(boardFormDto, userRepository.findById(user_id).get());
+        BoardEntity boardEntity = BoardEntity.boardEntity(boardFormDto, user.get());
         boardRepository.save(boardEntity);
 
-        return mapper.map(boardEntity, BoardFormDto.class);
+        boardFormDto.setId(boardEntity.getId());
+
+        return boardFormDto;
     }
 
     @Override
     public BoardFormDto readBoard(Long id) {
-        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
+        BoardEntity boardEntity = boardRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
+        boardFormDto.setUserName(boardEntity.getUser().getUserName());
 
         return boardFormDto;
     }
@@ -83,7 +82,9 @@ public class BoardServiceImpl implements BoardService{
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         for(BoardEntity b : boardEntities){
+            UserEntity user = b.getUser();
             BoardFormDto dto = mapper.map(b, BoardFormDto.class);
+            dto.setUserName(user.getUserName());
             boardFormDto.add(dto);
         }
 
@@ -92,7 +93,8 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardFormDto updateBoard(Long id, RequestUpdateBoard requestUpdateBoard) {
-        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
+        BoardEntity boardEntity = boardRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
 
         // updateBoard() 메서드에 필요한 필드들을 RequestUpdateBoard로부터 가져와서 BoardEntity에 반영합니다.
         boardEntity.setTitle(requestUpdateBoard.getTitle());
@@ -105,6 +107,7 @@ public class BoardServiceImpl implements BoardService{
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BoardFormDto boardFormDto = mapper.map(boardEntity, BoardFormDto.class);
+        boardFormDto.setUserName(boardEntity.getUser().getUserName());
         return boardFormDto;
     }
 

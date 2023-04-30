@@ -3,6 +3,7 @@ package sejong.eucnt.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.entity.BoardEntity;
+import sejong.eucnt.entity.UserEntity;
 
 import java.util.List;
 import java.util.Optional;

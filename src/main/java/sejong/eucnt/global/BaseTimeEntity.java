@@ -1,6 +1,7 @@
 package sejong.eucnt.global;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  상속 받는 자식 클래스에 매핑 정보만 제공합니다.
 */
 @Getter
+@Setter
 public abstract class BaseTimeEntity {
     @CreatedDate
     @Column(updatable = false)

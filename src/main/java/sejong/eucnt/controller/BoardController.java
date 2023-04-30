@@ -35,23 +35,22 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{country_name}/read/{board_id}")
-    public ResponseEntity<ResponseReadPost> readBoard(@PathVariable("country_name") CountryName countryName, @PathVariable("board_id") Long id){
+    public ResponseEntity<BoardFormDto> readBoard(@PathVariable("country_name") CountryName countryName,
+                                                      @PathVariable("board_id") Long id){
         BoardFormDto boardFormDto = boardService.readBoard(id);
-        ResponseReadPost responseReadPost = new ModelMapper().map(boardFormDto, ResponseReadPost.class);
-        return ResponseEntity.ok(responseReadPost);
+        return ResponseEntity.ok(boardFormDto);
     }
 
     @GetMapping("/boards/{country_name}/read")
-    public List<BoardFormDto> getBoardList(@PathVariable("country_name") CountryName countryName) {
-        return boardService.getBoardList(countryName);
+    public ResponseEntity<List<BoardFormDto>> getBoardList(@PathVariable("country_name") CountryName countryName) {
+        return ResponseEntity.ok(boardService.getBoardList(countryName));
     }
 
     @PutMapping("/boards/{country_name}/update/{board_id}")
-    public ResponseEntity<ResponseUpdateBoard> updateBoard(@PathVariable("country_name") CountryName countryName,
+    public ResponseEntity<BoardFormDto> updateBoard(@PathVariable("country_name") CountryName countryName,
                                                            @PathVariable ("board_id") Long id, @RequestBody RequestUpdateBoard requestUpdateBoard) {
         BoardFormDto boardFormDto = boardService.updateBoard(id, requestUpdateBoard);
-        ResponseUpdateBoard responseUpdateBoard = new ModelMapper().map(boardFormDto, ResponseUpdateBoard.class);
-        return ResponseEntity.ok(responseUpdateBoard);
+        return ResponseEntity.ok(boardFormDto);
     }
 
     @DeleteMapping("/boards/{country_name}/delete/{board_id}")

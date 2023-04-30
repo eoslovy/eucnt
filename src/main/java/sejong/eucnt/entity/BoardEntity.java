@@ -6,6 +6,7 @@ import lombok.ToString;
 import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.enumeration.CountryName;
 import sejong.eucnt.global.BaseEntity;
+import sejong.eucnt.global.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class BoardEntity extends BaseEntity {
+public class BoardEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
