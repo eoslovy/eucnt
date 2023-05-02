@@ -30,6 +30,8 @@ public class BoardEntity extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentEntity> comments = new ArrayList<>();
     public static BoardEntity boardEntity(BoardFormDto boardFormDto, UserEntity user) {
         BoardEntity boardEntity = new BoardEntity();
 

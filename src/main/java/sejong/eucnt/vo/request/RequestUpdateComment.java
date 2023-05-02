@@ -5,8 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RequestCreateBoard {
+public class RequestUpdateComment {
+    private Long comment_id;
     private Long user_id;
-    private String title;
+    private Long board_id;
     private String content;
 }
