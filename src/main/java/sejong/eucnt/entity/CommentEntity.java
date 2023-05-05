@@ -28,10 +28,11 @@ public class CommentEntity extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
-    public static CommentEntity commentEntity(CommentFormDto commentFormDto, BoardEntity board) {
+    public static CommentEntity commentEntity(CommentFormDto commentFormDto, BoardEntity board, UserEntity user) {
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.setComments(commentFormDto.getComments());
         commentEntity.setBoard(board);
+        commentEntity.setUser(user);
         commentEntity.setComments_id(commentFormDto.getComments_id());
         return commentEntity;
     }

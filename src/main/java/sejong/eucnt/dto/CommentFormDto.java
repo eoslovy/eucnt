@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 @Data
 public class CommentFormDto {
     private Long comments_id;
-    private Long board_id;
     private String comments;
     private String userName;
     private LocalDateTime regTime;

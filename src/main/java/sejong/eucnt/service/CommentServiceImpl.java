@@ -10,15 +10,20 @@ import sejong.eucnt.dto.BoardFormDto;
 import sejong.eucnt.dto.CommentFormDto;
 import sejong.eucnt.entity.BoardEntity;
 import sejong.eucnt.entity.CommentEntity;
+import sejong.eucnt.entity.UserEntity;
 import sejong.eucnt.enumeration.CountryName;
 import sejong.eucnt.repository.BoardRepository;
 import sejong.eucnt.repository.CommentRepository;
+import sejong.eucnt.repository.UserRepository;
 import sejong.eucnt.vo.request.RequestCreateComment;
 import sejong.eucnt.vo.request.RequestUpdateBoard;
 import sejong.eucnt.vo.request.RequestUpdateComment;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,41 +31,52 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, BoardRepository boardRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, BoardRepository boardRepository,UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.boardRepository = boardRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public CommentFormDto createComment(RequestCreateComment requestCreateComment, CountryName countryName) {
+    public CommentFormDto createComment(RequestCreateComment requestCreateComment, CountryName countryName, Long boardId) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         CommentFormDto commentFormDto = mapper.map(requestCreateComment, CommentFormDto.class);
 
-        Optional<BoardEntity> board = boardRepository.findById(requestCreateComment.getBoard_id());
+        UserEntity user = userRepository.findById(requestCreateComment.getUser_id())
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다"));
+        BoardEntity board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException("게시물을 찾을 수 없습니다"));
 
-        CommentEntity commentEntity = CommentEntity.commentEntity(commentFormDto, board.get());
+        CommentEntity commentEntity = CommentEntity.commentEntity(commentFormDto, board, user);
         commentRepository.save(commentEntity);
 
-        commentFormDto.setComment_id(commentEntity.getComment_id());
+        commentFormDto.setComments_id(commentEntity.getComments_id());
 
         return commentFormDto;
     }
-
     @Override
-    public CommentFormDto readComment(Long id) {
-        CommentEntity commentEntity = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다"));
+    public List<CommentFormDto> readCommentsByBoardId(Long boardId) {
+        List<CommentEntity> commentEntities = commentRepository.findByBoardId(boardId);
 
+        if (commentEntities.isEmpty()) {
+            throw new EntityNotFoundException("해당 게시물에 대한 댓글을 찾을 수 없습니다.");
+        }
+
+        List<CommentFormDto> commentFormDtos = new ArrayList<>();
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        CommentFormDto commentFormDto = mapper.map(commentEntity, CommentFormDto.class);
-        commentFormDto.setComment_id(commentEntity.getComment_id());
-        commentFormDto.setBoard_id(commentEntity.getBoard().getId());
+        for (CommentEntity commentEntity : commentEntities) {
+            UserEntity user = commentEntity.getUser();
+            CommentFormDto commentFormDto = mapper.map(commentEntity, CommentFormDto.class);
+            commentFormDto.setUserName(user.getUserName());
+            commentFormDtos.add(commentFormDto);
+        }
 
-        return commentFormDto;
+        return commentFormDtos;
     }
 
     @Override
@@ -68,13 +84,12 @@ public class CommentServiceImpl implements CommentService{
         CommentEntity commentEntity = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다"));
 
-        commentEntity.setContent(requestUpdateComment.getContent());
+        commentEntity.setComments(requestUpdateComment.getComments());
         commentRepository.save(commentEntity);
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         CommentFormDto commentFormDto = mapper.map(commentEntity, CommentFormDto.class);
-        commentFormDto.setComment_id(commentEntity.getComment_id());
         return commentFormDto;
     }
 
