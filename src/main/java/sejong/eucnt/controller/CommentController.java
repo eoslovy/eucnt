@@ -36,14 +36,6 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCreateComment);
     }
 
-//    @GetMapping("/boards/{country_name}/{board_id}/comments")
-//    public ResponseEntity<ResponseReadComment> readComment(@PathVariable("country_name") CountryName countryName,
-//                                                           @PathVariable("board_id") Long board_id){
-//        CommentFormDto commentFormDto = commentService.readComment(id);
-//        ResponseReadComment responseReadComment = new ModelMapper().map(commentFormDto, ResponseReadComment.class);
-//        return ResponseEntity.ok(responseReadComment);
-//    }
-
     @GetMapping("/boards/{country_name}/{board_id}/comments")
     public ResponseEntity<List<CommentFormDto>> getCommentList(@PathVariable("country_name") CountryName countryName,
                                                                @PathVariable("board_id") Long boardId) {
