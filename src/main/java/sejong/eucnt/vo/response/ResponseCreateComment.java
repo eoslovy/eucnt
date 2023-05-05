@@ -6,8 +6,6 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseCreateComment {
-    private Long comment_id;
-    private Long user_id;
-    private Long board_id;
-    private String content;
+    private Long comments_id;
+    private String comments;
 }

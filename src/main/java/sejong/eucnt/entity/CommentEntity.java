@@ -20,16 +20,19 @@ import java.time.LocalDateTime;
 public class CommentEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    private Long comments_id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private BoardEntity board;
-    private String content;
+    private String comments;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
     public static CommentEntity commentEntity(CommentFormDto commentFormDto, BoardEntity board) {
         CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setContent(commentFormDto.getContent());
+        commentEntity.setComments(commentFormDto.getComments());
         commentEntity.setBoard(board);
-        commentEntity.setComment_id(commentFormDto.getComment_id());
+        commentEntity.setComments_id(commentFormDto.getComments_id());
         return commentEntity;
     }
 }

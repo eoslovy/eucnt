@@ -7,6 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequestCreateComment {
     private Long user_id;
-    private Long board_id;
-    private String content;
+    private String comments;
 }

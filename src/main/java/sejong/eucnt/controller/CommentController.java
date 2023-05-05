@@ -25,15 +25,16 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/{country_name}/comments")
+    @PostMapping("/boards/{country_name}/{board_id}/comments")
     public ResponseEntity<ResponseCreateComment> createComment(@RequestBody RequestCreateComment requestCreateComment,
-                                                               @PathVariable("country_name") CountryName countryName) {
+                                                               @PathVariable("country_name") CountryName countryName,
+                                                               @PathVariable("board_id") Long id) {
         CommentFormDto commentFormDto = commentService.createComment(requestCreateComment, countryName);
         ResponseCreateComment responseCreateComment = new ModelMapper().map(commentFormDto, ResponseCreateComment.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCreateComment);
     }
 
-    @GetMapping("/{country_name}/comments/{comment_id}")
+    @GetMapping("/boards/{country_name}/{board_id}/comments")
     public ResponseEntity<ResponseReadComment> readComment(@PathVariable("country_name") CountryName countryName,
                                                            @PathVariable("comment_id") Long id){
         CommentFormDto commentFormDto = commentService.readComment(id);
@@ -41,7 +42,7 @@ public class CommentController {
         return ResponseEntity.ok(responseReadComment);
     }
 
-    @PutMapping("/{country_name}/comments/{comment_id}")
+    @PutMapping("/boards/{country_name}/{board_id}/comments/{comment_id}")
     public ResponseEntity<ResponseUpdateComment> updateBoard(@PathVariable("country_name") CountryName countryName,
                                                              @PathVariable ("comment_id") Long id, @RequestBody RequestUpdateComment requestUpdateComment) {
         CommentFormDto commentFormDto = commentService.updateComment(id, requestUpdateComment);
@@ -49,7 +50,7 @@ public class CommentController {
         return ResponseEntity.ok(responseUpdateComment);
     }
 
-    @DeleteMapping("{country_name}/comments/{comment_id}")
+    @DeleteMapping("/boards/{country_name}/{board_id}/comments/{comment_id}")
     public ResponseEntity<?> deleteComment(@PathVariable("country_name") CountryName countryName, @PathVariable ("comment_id") Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.ok("deleted successfully");

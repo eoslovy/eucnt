@@ -29,6 +29,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardEntity> boards = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentEntity> comments;
     public static UserEntity createUser(UserFormDto userFormDto, BCryptPasswordEncoder passwordEncoder){
         UserEntity userEntity = new UserEntity();
         String password = passwordEncoder.encode(userFormDto.getPassword());
