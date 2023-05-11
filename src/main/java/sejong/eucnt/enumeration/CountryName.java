@@ -1,5 +1,5 @@
 package sejong.eucnt.enumeration;
 
 public enum CountryName {
-    Spain, Germany, England
+    Spain, Germany, England, France, Italy
 }
