@@ -7,20 +7,29 @@ spring:
       settings:
         web-allow-others: true
 
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password:
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#        dialect: org.hibernate.dialect.H2Dialect
+
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
+    url: jdbc:mysql://eucntdb.cu1vkvjwoqqo.ap-northeast-2.rds.amazonaws.com:3306/eucnt_db
+    username: admin
+    password: 18011815
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
+      ddl-auto: create
 
 #jwt:
 #  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
@@ -28,3 +37,5 @@ spring:
 jwt:
 #  secret: t6JxjQLNxDDa3yA3VlXQh50zvV8WKS5ZcUU6kKWaErmeeH6hWUyChb0yG1X6j5e6QhQY0Bk6M5UxhKow8nJVEA==
   expiration: 7200000 # 토큰이 만료되기까지의 시간 (밀리초 단위, 여기서는 2시간)
+#server:
+#  port: 7070
